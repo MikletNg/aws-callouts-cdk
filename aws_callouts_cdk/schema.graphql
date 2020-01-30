@@ -1,0 +1,83 @@
+enum QuestionType{
+    NUMBER
+    YES_NO
+    DATE
+    TIME
+    MULTIPLE_CHOICE
+    OK
+}
+
+type Question{
+    question_template: String!
+    question_type: QuestionType!
+}
+
+type Reciever{
+    phone_number: String!
+    username: String!
+}
+
+type CallTask{
+    task_id: ID!
+    timestamp: Int!
+    greeting: String!
+    ending: String!
+    questions: [Question]!
+    receivers: [Reciever!]!
+}
+
+type S3Object{
+    bucket_name: String!
+    key: String!
+    prefix: String
+}
+
+type CallReport{
+    task_id: ID!
+    timestamp: Int!
+    report_path: S3Object!
+}
+
+input IQuestion{
+    question_template: String!
+    question_type: QuestionType!
+}
+
+input IReciever{
+    phone_number: String!
+    username: String!
+}
+
+input ICallTask{
+    task_id: String!
+    timestamp: Int!
+    greeting: String!
+    ending: String!
+    questions: [IQuestion]!
+    receivers: [IReciever!]!
+}
+
+input ICallReport{
+    task_id: String!
+    timestamp: Int!
+    report_path: S3Object!
+}
+
+type Query{
+    getCallTask(task_id: String!): CallTask
+    getCallTasks: [CallTask]
+    getCallReport(task_id: String!): CallReport
+    getCallReports: [CallReport]
+}
+
+type Mutation{
+    createCallTask(task: ICallTask): CallTask
+    createCallReport(report: ICallReport): CallReport
+}
+
+type Subscription{
+    createCallTask: CallTask
+    @aws_subscribe(mutations: ["createCallTask"])
+    createCallReport: CallReport
+    @aws_subscribe(mutations: ["createCallReport"])
+}

@@ -13,7 +13,7 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
 
-    author="author",
+    author="Mike Ng",
 
     package_dir={"": "aws_callouts_cdk"},
     packages=setuptools.find_packages(where="aws_callouts_cdk"),
@@ -22,7 +22,7 @@ setuptools.setup(
         "aws-cdk.core",
     ],
 
-    python_requires=">=3.6",
+    python_requires=">=3.7",
 
     classifiers=[
         "Development Status :: 4 - Beta",

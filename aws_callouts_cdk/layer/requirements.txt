@@ -1,0 +1,10 @@
+openpyxl==2.6.3
+Jinja2==2.10.1
+requests==2.22.0
+pandas==0.25.1
+pytz==2019.3
+numpy==1.17.2
+xlrd==1.2.0
+jdcal==1.4.1
+et_xmlfile==1.0.1
+markupsafe==1.1.1
