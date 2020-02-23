@@ -1,0 +1,15 @@
+{
+    "dev": {
+        "awscloudformation": {
+            "AuthRoleName": "amplify-aws-callout-cdk-web-dev-33229-authRole",
+            "UnauthRoleArn": "arn:aws:iam::751225572132:role/amplify-aws-callout-cdk-web-dev-33229-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::751225572132:role/amplify-aws-callout-cdk-web-dev-33229-authRole",
+            "Region": "us-east-1",
+            "DeploymentBucketName": "amplify-aws-callout-cdk-web-dev-33229-deployment",
+            "UnauthRoleName": "amplify-aws-callout-cdk-web-dev-33229-unauthRole",
+            "StackName": "amplify-aws-callout-cdk-web-dev-33229",
+            "StackId": "arn:aws:cloudformation:us-east-1:751225572132:stack/amplify-aws-callout-cdk-web-dev-33229/bfd15710-5417-11ea-8a15-0a803f1342f3",
+            "AmplifyAppId": "d11naj446tno94"
+        }
+    }
+}

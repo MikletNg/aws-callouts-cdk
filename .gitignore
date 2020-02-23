@@ -106,7 +106,7 @@ venv.bak/
 .mypy_cache/
 
 aws_callouts_cdk/layer/*
-!aws_callouts_cdk/layer/requirements.txt
+!aws_callouts_cdk/layer/python/requirements.txt
 .idea
 
 # CDK asset staging directory

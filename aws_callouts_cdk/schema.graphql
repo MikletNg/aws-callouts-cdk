@@ -7,35 +7,51 @@ enum QuestionType{
     OK
 }
 
-type Question{
+enum CallRecordType{
+    REPORT
+    TASK
+}
+
+type Question @aws_iam{
     question_template: String!
     question_type: QuestionType!
 }
 
-type Reciever{
+type Reciever @aws_iam{
     phone_number: String!
     username: String!
+    id: String!
+    receiver_id: String!
 }
 
-type CallTask{
+type CallTask @aws_iam{
+    call_type: CallRecordType!
     task_id: ID!
-    timestamp: Int!
+    created_at: AWSTimestamp!
     greeting: String!
     ending: String!
     questions: [Question]!
     receivers: [Reciever!]!
 }
 
-type S3Object{
+type S3Object @aws_iam{
     bucket_name: String!
     key: String!
     prefix: String
 }
 
-type CallReport{
+input IS3Object{
+    bucket_name: String!
+    key: String!
+    prefix: String
+}
+
+type CallReport @aws_iam{
+    call_type: CallRecordType!
     task_id: ID!
-    timestamp: Int!
+    created_at: AWSTimestamp!
     report_path: S3Object!
+    presigned_url: AWSURL!
 }
 
 input IQuestion{
@@ -46,11 +62,14 @@ input IQuestion{
 input IReciever{
     phone_number: String!
     username: String!
+    id: String!
+    receiver_id: String!
 }
 
 input ICallTask{
+    call_type: CallRecordType!
     task_id: String!
-    timestamp: Int!
+    created_at: AWSTimestamp!
     greeting: String!
     ending: String!
     questions: [IQuestion]!
@@ -58,26 +77,34 @@ input ICallTask{
 }
 
 input ICallReport{
+    call_type: CallRecordType!
     task_id: String!
-    timestamp: Int!
-    report_path: S3Object!
+    created_at: AWSTimestamp!
+    report_path: IS3Object!
+    presigned_url: AWSURL!
 }
 
+union CallRecord = CallTask | CallReport
+
 type Query{
-    getCallTask(task_id: String!): CallTask
-    getCallTasks: [CallTask]
-    getCallReport(task_id: String!): CallReport
-    getCallReports: [CallReport]
+    getLatestCallReportRecord(limit: Int!): [CallReport]!
+    @aws_iam
+    getLatestCallRecords(call_type: CallRecordType!, limit: Int!): [CallRecord]!
+    @aws_iam
 }
 
 type Mutation{
-    createCallTask(task: ICallTask): CallTask
-    createCallReport(report: ICallReport): CallReport
+    createCallTask(task: ICallTask!): CallTask
+    @aws_iam
+    createCallReport(report: ICallReport!): CallReport
+    @aws_iam
 }
 
 type Subscription{
     createCallTask: CallTask
     @aws_subscribe(mutations: ["createCallTask"])
+    @aws_iam
     createCallReport: CallReport
     @aws_subscribe(mutations: ["createCallReport"])
+    @aws_iam
 }

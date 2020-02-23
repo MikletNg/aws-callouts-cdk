@@ -14,12 +14,10 @@ init-ps1:
 	.env/Scripts/Activate.ps1
 	pip install -r requirements.txt
 
-layer:
-	rm -rf $(CUR_DIR)/$(LAYER_DIR) -v !('requirements.txt')
-	find $(CUR_DIR)/$(LAYER_DIR) -type f -not -name 'requirements.txt'-delete
-	mkdir -p $(LAYER_DIR)
+python-layer:
 	docker run --rm -v $(CUR_DIR):/foo -w /foo lambci/lambda:build-python3.7 \
-		pwd && ls -als && pip install -r $(LAYER_DIR)/requirements.txt --no-deps -t $(LAYER_DIR) && ls -als $(LAYER_DIR)
+		pip install -r $(LAYER_DIR)/python/requirements.txt --no-deps -t $(LAYER_DIR)/python
 
-express-deploy:
-	cdk deploy "*"
+nodejs-layer:
+	cd $(LAYER_DIR)/nodejs && \
+	npm install
