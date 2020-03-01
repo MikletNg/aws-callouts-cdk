@@ -352,12 +352,12 @@ class AwsCalloutsCdkStack(core.Stack):
                                                                       description="Callout Record DynamoDB Data Source",
                                                                       table=callout_record_table)
         callout_record_ddb_ds.create_resolver(type_name="Query",
-                                              field_name="getLatestCallTaskRecord",
+                                              field_name="getLatestCallTaskRecords",
                                               request_mapping_template=_appsync.MappingTemplate.from_string(
                                                   '{"version":"2017-02-28","operation":"Query","index":"CallTypeCreatedAtGlobalIndex","query":{"expression":"call_type = :call_type","expressionValues":{":call_type":{"S":"TASK"}}},"scanIndexForward":false,"limit":${ctx.args.limit}}'),
                                               response_mapping_template=_appsync.MappingTemplate.dynamo_db_result_list())
         callout_record_ddb_ds.create_resolver(type_name="Query",
-                                              field_name="getLatestCallReportRecord",
+                                              field_name="getLatestCallReportRecords",
                                               request_mapping_template=_appsync.MappingTemplate.from_string(
                                                   '{"version":"2017-02-28","operation":"Query","index":"CallTypeCreatedAtGlobalIndex","query":{"expression":"call_type = :call_type","expressionValues":{":call_type":{"S":"REPORT"}}},"scanIndexForward":false,"limit":${ctx.args.limit}}'),
                                               response_mapping_template=_appsync.MappingTemplate.dynamo_db_result_list())
@@ -412,10 +412,12 @@ class AwsCalloutsCdkStack(core.Stack):
         identity_pool_unauthorized_role.add_to_policy(
             _iam.PolicyStatement(effect=_iam.Effect.ALLOW, actions=["appsync:GraphQL"],
                                  resources=[
-                                     f"{appsync_api.arn}/types/Query/fields/getLatestCallRecord",
-                                     f"{appsync_api.arn}/types/Mutation/fields/createCallRecord",
-                                     f"{appsync_api.arn}/types/Subscription/fields/createCallTask",
-                                     f"{appsync_api.arn}/types/Subscription/fields/createCallReport"
+                                     f"{appsync_api.arn}/types/*",
+                                     # f"{appsync_api.arn}/types/Query/fields/getLatestCallTaskRecords",
+                                     # f"{appsync_api.arn}/types/Query/fields/getLatestCallReportRecords",
+                                     # f"{appsync_api.arn}/types/Mutation/fields/createCallRecord",
+                                     # f"{appsync_api.arn}/types/Subscription/fields/createCallTask",
+                                     # f"{appsync_api.arn}/types/Subscription/fields/createCallReport"
                                  ]))
 
         _cognito.CfnIdentityPoolRoleAttachment(self, "CognitoIdentityPoolRoleAttachment",

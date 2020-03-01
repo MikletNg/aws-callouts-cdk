@@ -55,23 +55,23 @@ const initialValues = {
     "questions": [
         {
             "question_template": "How much loans did you apply for?",
-            "question_type": "Number"
+            "question_type": "NUMBER"
         },
         {
             "question_template": "Is this the first time you apply for loan?",
-            "question_type": "Yes/No"
+            "question_type": "YES_NO"
         },
         {
             "question_template": "For further follow up, we like to call you back. Which date do you prefer?",
-            "question_type": "Date"
+            "question_type": "DATE"
         },
         {
             "question_template": "Preferred call back time?",
-            "question_type": "Time"
+            "question_type": "TIME"
         },
         {
             "question_template": "How do you know We Lend? A. Newsletter, B. Social Media, C. Promotion, D. Ads, or E. From Friend.",
-            "question_type": "Multiple Choice"
+            "question_type": "MULTIPLE_CHOICE"
         },
         {
             "question_template": "To complete the survey, please say OK.",
@@ -153,7 +153,7 @@ function App() {
                                                         fullWidth>Remove Question</Button>
                                             </Grid>
                                         </Grid>
-                                        <Grid container>
+                                        <Grid container spacing={2}>
                                             <FieldArray name="questions">
                                                 {({fields}) =>
                                                     fields.map((name, index) => (
@@ -290,7 +290,7 @@ function App() {
                                         </TableHead>
                                         <TableBody>
                                             <Connect
-                                                query={graphqlOperation(queries.getLatestCallTaskRecord, {
+                                                query={graphqlOperation(queries.getLatestCallTaskRecords, {
                                                     limit: 10,
                                                 })}
                                                 subscription={graphqlOperation(subscriptions.createCallTask)}
@@ -303,7 +303,7 @@ function App() {
                                                 {({data: {getLatestCallTaskRecord}, loading, errors}) => {
                                                     if (errors && errors.length) console.log(errors);
                                                     if (loading || !getLatestCallTaskRecord) return (
-                                                        <caption>Loading</caption>);
+                                                        <TableRow><TableCell>Loading</TableCell></TableRow>);
                                                     return getLatestCallTaskRecord.map((record, i) => (
                                                         <TableRow key={`${record.task_id + i}}`}>
                                                             <TableCell>{record.task_id}</TableCell>
@@ -334,7 +334,7 @@ function App() {
                                         </TableHead>
                                         <TableBody>
                                             <Connect
-                                                query={graphqlOperation(queries.getLatestCallReportRecord, {
+                                                query={graphqlOperation(queries.getLatestCallReportRecords, {
                                                     limit: 10,
                                                 })}
                                                 subscription={graphqlOperation(subscriptions.createCallReport)}
@@ -347,7 +347,7 @@ function App() {
                                                 {({data: {getLatestCallReportRecord}, loading, errors}) => {
                                                     if (errors && errors.length) console.log(errors);
                                                     if (loading || !getLatestCallReportRecord) return (
-                                                        <caption>Loading</caption>);
+                                                        <TableRow><TableCell>Loading</TableCell></TableRow>);
                                                     return getLatestCallReportRecord.map((record, i) => (
                                                         <TableRow key={`${record.task_id + i}}`}>
                                                             <TableCell>{record.task_id}</TableCell>

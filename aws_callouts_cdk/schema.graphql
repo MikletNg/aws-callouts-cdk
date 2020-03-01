@@ -84,12 +84,10 @@ input ICallReport{
     presigned_url: AWSURL!
 }
 
-union CallRecord = CallTask | CallReport
-
 type Query{
-    getLatestCallReportRecord(limit: Int!): [CallReport]!
+    getLatestCallReportRecords(limit: Int!): [CallReport]!
     @aws_iam
-    getLatestCallRecords(call_type: CallRecordType!, limit: Int!): [CallRecord]!
+    getLatestCallTaskRecords(limit: Int!): [CallTask]!
     @aws_iam
 }
 

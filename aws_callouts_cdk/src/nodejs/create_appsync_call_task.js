@@ -35,6 +35,11 @@ exports.lambda_handler = async (evt, ctx) => {
     
     console.log(response);
 
-    return ddb_ctx;
-
+    return {
+        "statusCode": 200,
+        "headers": {
+            "Access-Control-Allow-Headers": "*"
+        },
+        "body": JSON.stringify(response),
+    };
 };
