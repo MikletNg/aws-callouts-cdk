@@ -364,7 +364,7 @@ class AwsCalloutsCdkStack(core.Stack):
         callout_record_ddb_ds.create_resolver(type_name="Mutation",
                                               field_name="createCallReport",
                                               request_mapping_template=_appsync.MappingTemplate.from_string(
-                                                  '{"version":"2017-02-28","operation":"PutItem","key":{"task_id":{"S":"${ctx.args.task_id}"}},"attributeValues":$util.dynamodb.toMapValuesJson($ctx.args.record)}'),
+                                                  '{"version":"2017-02-28","operation":"PutItem","key":{"task_id":{"S":"${ctx.args.report.task_id}"},"created_at":{"N":"${ctx.args.report.created_at}"}},"attributeValues":$util.dynamodb.toMapValuesJson($ctx.args.report)}'),
                                               response_mapping_template=_appsync.MappingTemplate.dynamo_db_result_item())
 
         call_task_lambda_ds = appsync_api.add_lambda_data_source(name="CallTaskLambda",

@@ -67,9 +67,7 @@ input IReciever{
 }
 
 input ICallTask{
-    call_type: CallRecordType!
     task_id: String!
-    created_at: AWSTimestamp!
     greeting: String!
     ending: String!
     questions: [IQuestion]!
@@ -79,9 +77,9 @@ input ICallTask{
 input ICallReport{
     call_type: CallRecordType!
     task_id: String!
-    created_at: AWSTimestamp!
     report_path: IS3Object!
     presigned_url: AWSURL!
+    created_at: AWSTimestamp!
 }
 
 type Query{

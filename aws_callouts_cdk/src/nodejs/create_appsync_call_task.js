@@ -29,17 +29,12 @@ exports.lambda_handler = async (evt, ctx) => {
 
     const ddb_ctx = JSON.parse(JSON.stringify(TASK));
     ddb_ctx.created_at = moment().unix();
+    ddb_ctx.call_type = 'TASK';
     console.log(JSON.stringify(ddb_ctx));
 
     const response = await ddb.put({TableName: process.env.CallRecordTableName, Item: ddb_ctx}).promise();
     
     console.log(response);
 
-    return {
-        "statusCode": 200,
-        "headers": {
-            "Access-Control-Allow-Headers": "*"
-        },
-        "body": JSON.stringify(response),
-    };
+    return ddb_ctx;
 };

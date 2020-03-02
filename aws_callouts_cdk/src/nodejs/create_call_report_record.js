@@ -49,6 +49,6 @@ exports.lambda_handler = async (evt, ctx) => {
     const mutate_res = await AppSyncClient.mutate({ mutation, variables: { report: msg } });
     console.log({mutate_res});
 
-    return evt
+    return evt;
 
 };

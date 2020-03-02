@@ -1,6 +1,7 @@
 import React from 'react';
-import Amplify, {graphqlOperation} from 'aws-amplify';
-import * as queries from './graphql/queries';
+import Amplify, {graphqlOperation, API} from 'aws-amplify';
+import * as queries from './graphql/queries'
+import * as mutations from './graphql/mutations';
 import * as subscriptions from './graphql/subscriptions';
 import {Form, Field} from 'react-final-form'
 import arrayMutators from 'final-form-arrays'
@@ -39,13 +40,15 @@ Amplify.configure({
     }
 });
 
-const onSubmit = async values => {
-    values.receivers = values.receivers.map((v, i) => {
-        v.id = `${v.task_id}_${i + 1}`;
+const onSubmit = async task => {
+    task.receivers = task.receivers.map((v, i) => {
+        v.id = `${task.task_id}_${i + 1}`;
         v.receiver_id = `${i + 1}`;
-        console.log({v});
         return v
-    })
+    });
+    console.log(task);
+    const createCallTask = await API.graphql(graphqlOperation(mutations.createCallTask, {task}));
+    console.log(createCallTask);
 };
 
 const initialValues = {
@@ -294,22 +297,22 @@ function App() {
                                                     limit: 10,
                                                 })}
                                                 subscription={graphqlOperation(subscriptions.createCallTask)}
-                                                onSubscriptionMsg={({getLatestCallTaskRecord}, {createCallTask}) => {
-                                                    getLatestCallTaskRecord.unshift(createCallTask);
-                                                    getLatestCallTaskRecord.pop();
-                                                    return {getLatestCallTaskRecord};
+                                                onSubscriptionMsg={({getLatestCallTaskRecords}, {createCallTask}) => {
+                                                    getLatestCallTaskRecords.unshift(createCallTask);
+                                                    getLatestCallTaskRecords.pop();
+                                                    return {getLatestCallTaskRecords};
                                                 }}
                                             >
-                                                {({data: {getLatestCallTaskRecord}, loading, errors}) => {
+                                                {({data: {getLatestCallTaskRecords}, loading, errors}) => {
                                                     if (errors && errors.length) console.log(errors);
-                                                    if (loading || !getLatestCallTaskRecord) return (
+                                                    if (loading || !getLatestCallTaskRecords) return (
                                                         <TableRow><TableCell>Loading</TableCell></TableRow>);
-                                                    return getLatestCallTaskRecord.map((record, i) => (
+                                                    return getLatestCallTaskRecords.map((record, i) => (
                                                         <TableRow key={`${record.task_id + i}}`}>
                                                             <TableCell>{record.task_id}</TableCell>
                                                             <TableCell>{moment.unix(record.created_at).fromNow()}</TableCell>
-                                                            <TableCell>{record.task_id}</TableCell>
-                                                            <TableCell>{record.task_id}</TableCell>
+                                                            <TableCell>{record.questions.length}</TableCell>
+                                                            <TableCell>{record.receivers.length}</TableCell>
                                                         </TableRow>
                                                     ))
                                                 }}
@@ -338,17 +341,17 @@ function App() {
                                                     limit: 10,
                                                 })}
                                                 subscription={graphqlOperation(subscriptions.createCallReport)}
-                                                onSubscriptionMsg={({getLatestCallReportRecord}, {createCallReport}) => {
-                                                    getLatestCallReportRecord.unshift(createCallReport);
-                                                    getLatestCallReportRecord.pop();
-                                                    return {getLatestCallReportRecord};
+                                                onSubscriptionMsg={({getLatestCallReportRecords}, {createCallReport}) => {
+                                                    getLatestCallReportRecords.unshift(createCallReport);
+                                                    getLatestCallReportRecords.pop();
+                                                    return {getLatestCallReportRecords};
                                                 }}
                                             >
-                                                {({data: {getLatestCallReportRecord}, loading, errors}) => {
+                                                {({data: {getLatestCallReportRecords}, loading, errors}) => {
                                                     if (errors && errors.length) console.log(errors);
-                                                    if (loading || !getLatestCallReportRecord) return (
+                                                    if (loading || !getLatestCallReportRecords) return (
                                                         <TableRow><TableCell>Loading</TableCell></TableRow>);
-                                                    return getLatestCallReportRecord.map((record, i) => (
+                                                    return getLatestCallReportRecords.map((record, i) => (
                                                         <TableRow key={`${record.task_id + i}}`}>
                                                             <TableCell>{record.task_id}</TableCell>
                                                             <TableCell>{moment.unix(record.created_at).fromNow()}</TableCell>
