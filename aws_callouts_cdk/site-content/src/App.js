@@ -52,20 +52,20 @@ const onSubmit = async task => {
 };
 
 const initialValues = {
-    "task_id": "WeLendCallDemo",
-    "greeting": "Hi {{ username }}. This is a simple survey from We Lend for collecting review about our services.",
+    "task_id": `WeBorrowCallDemo${moment().unix()}`,
+    "greeting": "Hi {{ username }}. This is a survey from We Borrow for collecting review about our lending services.",
     "ending": "Good Bye {{ username }} and have a nice day!",
     "questions": [
         {
-            "question_template": "How much loans did you apply for?",
+            "question_template": "How much loan did you apply for?",
             "question_type": "NUMBER"
         },
         {
-            "question_template": "Is this the first time you apply for loan?",
+            "question_template": "Is this the first time you apply for the loan?",
             "question_type": "YES_NO"
         },
         {
-            "question_template": "For further follow up, we like to call you back. Which date do you prefer?",
+            "question_template": "For the further follow-up, we like to call you back. Which date do you prefer?",
             "question_type": "DATE"
         },
         {
@@ -73,7 +73,7 @@ const initialValues = {
             "question_type": "TIME"
         },
         {
-            "question_template": "How do you know We Lend? A. Newsletter, B. Social Media, C. Promotion, D. Ads, or E. From Friend.",
+            "question_template": "How do you know We Borrow? A. Newsletter, B. Social Media, C. Promotion, D. Ads, or E. From Friend.",
             "question_type": "MULTIPLE_CHOICE"
         },
         {
@@ -89,6 +89,13 @@ const useStyles = makeStyles(() => ({
     },
     paper: {
         padding: 12
+    },
+    question: {
+        marginTop: 10,
+        marginBottom: 10,
+        marginLeft: 20,
+        marginRight: 20,
+        padding: 8
     }
 }));
 
@@ -160,44 +167,44 @@ function App() {
                                             <FieldArray name="questions">
                                                 {({fields}) =>
                                                     fields.map((name, index) => (
-                                                        <div key={name} style={{marginTop: 10}}>
-                                                            <Grid container>
-                                                                <Grid item xs={12}>
-                                                                    <Field
-                                                                        name={`${name}.question_template`}
-                                                                        component={TextField}
-                                                                        type="text"
-                                                                        label="Question Template"
-                                                                        fullWidth
-                                                                        required
-                                                                    />
-                                                                </Grid>
-                                                                <Grid item xs={12}>
-                                                                    <Field
-                                                                        name={`${name}.question_type`}
-                                                                        component={Select}
-                                                                        label="Question Type"
-                                                                        fullWidth
-                                                                        required
-                                                                        formControlProps={{fullWidth: true}}
-                                                                    >
-                                                                        <MenuItem value="YES_NO">Yes/No</MenuItem>
-                                                                        <MenuItem value="MULTIPLE_CHOICE">Multiple
-                                                                            Choice</MenuItem>
-                                                                        <MenuItem value="NUMBER">Number</MenuItem>
-                                                                        <MenuItem value="DATE">Date</MenuItem>
-                                                                        <MenuItem value="TIME">Time</MenuItem>
-                                                                        <MenuItem value="OK">OK</MenuItem>
-                                                                    </Field>
-                                                                </Grid>
-                                                                <Grid item xs={12}>
-                                                                    <Button fullWidth variant="outlined"
-                                                                            color="secondary"
-                                                                            size="large"
-                                                                            onClick={() => fields.remove(index)}>REMOVE</Button>
-                                                                </Grid>
+                                                        <Paper key={index} className={classes.question} component={Grid}
+                                                               elevation={6} container item
+                                                               spacing={1}>
+                                                            <Grid item xs={12}>
+                                                                <Field
+                                                                    name={`${name}.question_template`}
+                                                                    component={TextField}
+                                                                    type="text"
+                                                                    label="Question Template"
+                                                                    fullWidth
+                                                                    required
+                                                                />
                                                             </Grid>
-                                                        </div>
+                                                            <Grid item xs={12}>
+                                                                <Field
+                                                                    name={`${name}.question_type`}
+                                                                    component={Select}
+                                                                    label="Question Type"
+                                                                    fullWidth
+                                                                    required
+                                                                    formControlProps={{fullWidth: true}}
+                                                                >
+                                                                    <MenuItem value="YES_NO">Yes/No</MenuItem>
+                                                                    <MenuItem value="MULTIPLE_CHOICE">Multiple
+                                                                        Choice</MenuItem>
+                                                                    <MenuItem value="NUMBER">Number</MenuItem>
+                                                                    <MenuItem value="DATE">Date</MenuItem>
+                                                                    <MenuItem value="TIME">Time</MenuItem>
+                                                                    <MenuItem value="OK">OK</MenuItem>
+                                                                </Field>
+                                                            </Grid>
+                                                            <Grid item xs={12} style={{marginBottom: 8}}>
+                                                                <Button fullWidth variant="outlined"
+                                                                        color="secondary"
+                                                                        size="large"
+                                                                        onClick={() => fields.remove(index)}>REMOVE</Button>
+                                                            </Grid>
+                                                        </Paper>
                                                     ))
                                                 }
                                             </FieldArray>
@@ -222,24 +229,36 @@ function App() {
                                             <FieldArray name="receivers">
                                                 {({fields}) =>
                                                     fields.map((name, index) => (
-                                                        <div key={name} style={{marginTop: 10}}>
-                                                            <Field
-                                                                name={`${name}.phone_number`}
-                                                                component={TextField}
-                                                                type="text"
-                                                                label="Phone Number"
-                                                                required
-                                                            />
-                                                            <Field
-                                                                name={`${name}.username`}
-                                                                component={TextField}
-                                                                type="text"
-                                                                label="Name"
-                                                                required
-                                                            />
-                                                            <Button variant="outlined" color="secondary" size="large"
-                                                                    onClick={() => fields.remove(index)}>REMOVE</Button>
-                                                        </div>
+                                                        <Paper key={index} className={classes.question} component={Grid}
+                                                               elevation={6} container item
+                                                               spacing={1}>
+                                                            <Grid item xs={12}>
+                                                                <Field
+                                                                    name={`${name}.phone_number`}
+                                                                    component={TextField}
+                                                                    type="text"
+                                                                    label="Phone Number"
+                                                                    required
+                                                                    fullWidth
+                                                                />
+                                                            </Grid>
+                                                            <Grid item xs={12}>
+                                                                <Field
+                                                                    name={`${name}.username`}
+                                                                    component={TextField}
+                                                                    type="text"
+                                                                    label="Name"
+                                                                    required
+                                                                    fullWidth
+                                                                />
+                                                            </Grid>
+                                                            <Grid item xs={12}>
+                                                                <Button variant="outlined" color="secondary"
+                                                                        size="large"
+                                                                        onClick={() => fields.remove(index)} fullWidth
+                                                                        style={{marginBottom: 8}}>REMOVE</Button>
+                                                            </Grid>
+                                                        </Paper>
                                                     ))
                                                 }
                                             </FieldArray>
@@ -299,7 +318,7 @@ function App() {
                                                 subscription={graphqlOperation(subscriptions.createCallTask)}
                                                 onSubscriptionMsg={({getLatestCallTaskRecords}, {createCallTask}) => {
                                                     getLatestCallTaskRecords.unshift(createCallTask);
-                                                    getLatestCallTaskRecords.pop();
+                                                    if (getLatestCallTaskRecords.length > 10) getLatestCallTaskRecords.pop();
                                                     return {getLatestCallTaskRecords};
                                                 }}
                                             >
@@ -343,7 +362,7 @@ function App() {
                                                 subscription={graphqlOperation(subscriptions.createCallReport)}
                                                 onSubscriptionMsg={({getLatestCallReportRecords}, {createCallReport}) => {
                                                     getLatestCallReportRecords.unshift(createCallReport);
-                                                    getLatestCallReportRecords.pop();
+                                                    if (getLatestCallReportRecords.length > 10) getLatestCallReportRecords.pop();
                                                     return {getLatestCallReportRecords};
                                                 }}
                                             >

@@ -26,22 +26,24 @@ class AwsCalloutsCdkStack(core.Stack):
         web_bucket = _s3.Bucket(self, "StaticWebBucket",
                                 website_index_document="index.html",
                                 website_error_document="index.html",
-                                removal_policy=core.RemovalPolicy.DESTROY)
+                                removal_policy=core.RemovalPolicy.DESTROY,
+                                public_read_access=True)
 
-        # web_distribution = _clf.CloudFrontWebDistribution(self, 'StaticWebDistribution',
-        #                                                   origin_configs=[_clf.SourceConfiguration(
-        #                                                       s3_origin_source=_clf.S3OriginConfig(
-        #                                                           s3_bucket_source=web_bucket),
-        #                                                       behaviors=[_clf.Behavior(is_default_behavior=True)])],
-        #                                                   viewer_protocol_policy=_clf.ViewerProtocolPolicy.REDIRECT_TO_HTTPS)
-        #
-        # _s3d.BucketDeployment(self, "S3StaticWebContentDeploymentWithInvalidation",
-        #                       sources=[
-        #                           _s3d.Source.asset(f"{pathlib.Path(__file__).parent.absolute()}/site-content/build")],
-        #                       destination_bucket=web_bucket,
-        #                       distribution=web_distribution,
-        #                       distribution_paths=["/*"],
-        #                       storage_class=_s3.StorageClass.INTELLIGENT_TIERING)
+        core.CfnOutput(self, 'WebBucketUrl', value=web_bucket.bucket_domain_name)
+
+        web_distribution = _clf.CloudFrontWebDistribution(self, 'StaticWebDistribution',
+                                                          origin_configs=[_clf.SourceConfiguration(
+                                                              s3_origin_source=_clf.S3OriginConfig(
+                                                                  s3_bucket_source=web_bucket),
+                                                              behaviors=[_clf.Behavior(is_default_behavior=True)])],
+                                                          viewer_protocol_policy=_clf.ViewerProtocolPolicy.REDIRECT_TO_HTTPS)
+
+        _s3d.BucketDeployment(self, "S3StaticWebContentDeploymentWithInvalidation",
+                              sources=[
+                                  _s3d.Source.asset(f"{pathlib.Path(__file__).parent.absolute()}/site-content/build")],
+                              destination_bucket=web_bucket,
+                              distribution=web_distribution,
+                              distribution_paths=["/*"])
 
         file_bucket = _s3.Bucket(self, "FileBucket",
                                  removal_policy=core.RemovalPolicy.DESTROY)
